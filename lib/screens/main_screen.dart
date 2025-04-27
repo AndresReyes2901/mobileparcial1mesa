@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'home_screen.dart';
 import 'product_list_screen.dart';
 import 'cart_screen.dart';
@@ -23,8 +22,12 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF1C1C1E),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xFF2C2C2E),
+        selectedItemColor: const Color(0xFF0A84FF),
+        unselectedItemColor: Colors.white54,
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         onTap: (idx) => setState(() => _currentIndex = idx),

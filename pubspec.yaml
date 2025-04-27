@@ -38,6 +38,8 @@ dependencies:
   url_launcher: ^6.1.10
   speech_to_text: ^7.0.0
   intl: ^0.18.0
+  firebase_core: ^2.25.0
+  firebase_dynamic_links: ^5.4.6
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -58,10 +60,14 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
+  uses-material-design: true
+
+  assets:
+    - assets/images/pc_promo_banner.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

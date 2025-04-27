@@ -4,7 +4,6 @@ import '../providers/cart_provider.dart';
 import 'checkout_screen.dart';
 import '../providers/recommendation_provider.dart';
 
-
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
 
@@ -12,33 +11,12 @@ class CartScreen extends StatefulWidget {
   State<CartScreen> createState() => _CartScreenState();
 }
 
-class _CartScreenState extends State<CartScreen> with WidgetsBindingObserver {
+class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addObserver(this);
-
-
     context.read<CartProvider>().loadCart();
     context.read<RecommendationProvider>().loadRecommendations();
-  }
-
-  @override
-  void dispose() {
-
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-
-    if (state == AppLifecycleState.resumed) {
-      context.read<CartProvider>().loadCart();
-
-      context.read<RecommendationProvider>().loadRecommendations();
-    }
   }
 
   @override
@@ -47,107 +25,116 @@ class _CartScreenState extends State<CartScreen> with WidgetsBindingObserver {
     final recProv = context.watch<RecommendationProvider>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mi Carrito')),
+      backgroundColor: const Color(0xFF1C1C1E),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2C2C2E),
+        title: const Text('Mi Carrito'),
+      ),
       body: cart.loading
           ? const Center(child: CircularProgressIndicator())
           : cart.error != null
-          ? Center(child: Text('Error: ${cart.error}'))
+          ? Center(
+          child: Text('Error: ${cart.error}',
+              style: const TextStyle(color: Colors.red)))
           : cart.items.isEmpty
-          ? const Center(child: Text('Carrito vacío'))
+          ? const Center(
+          child: Text('Carrito vacío',
+              style: TextStyle(color: Colors.white70)))
           : SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Lista de ítems del carrito
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: cart.items.length,
-              itemBuilder: (_, i) {
-                final item = cart.items[i];
-                return ListTile(
-                  title: Text(item.product.name),
-                  subtitle: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.remove),
-                        onPressed: () => cart.decreaseQuantity(item.id),
-                      ),
-                      Text('${item.quantity}'),
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () => cart.increaseQuantity(item.id),
-                      ),
-                    ],
-                  ),
-                  trailing: Text('\$${item.subtotal.toStringAsFixed(2)}'),
-                  onLongPress: () => cart.removeItem(item.id),
-                );
-              },
-            ),
-
-            const Divider(),
-
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Text(
-                'Recomendaciones',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
+            ...cart.items.map((item) => Card(
+              color: const Color(0xFF2C2C2E),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              margin: const EdgeInsets.only(bottom: 12),
+              child: ListTile(
+                title: Text(item.product.name,
+                    style: const TextStyle(color: Colors.white)),
+                subtitle: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.remove,
+                          color: Colors.white),
+                      onPressed: () =>
+                          cart.decreaseQuantity(item.id),
+                    ),
+                    Text('${item.quantity}',
+                        style: const TextStyle(color: Colors.white)),
+                    IconButton(
+                      icon: const Icon(Icons.add,
+                          color: Colors.white),
+                      onPressed: () =>
+                          cart.increaseQuantity(item.id),
+                    ),
+                  ],
+                ),
+                trailing: Text(
+                  '\$${item.subtotal.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                      color: Colors.greenAccent,
+                      fontWeight: FontWeight.bold),
+                ),
+                onLongPress: () => cart.removeItem(item.id),
               ),
-            ),
+            )),
+            const SizedBox(height: 24),
+            const Text('Recomendaciones',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+            const SizedBox(height: 12),
             SizedBox(
               height: 180,
               child: recProv.loading
                   ? const Center(child: CircularProgressIndicator())
-                  : recProv.error != null
-                  ? Center(child: Text('Error: ${recProv.error}'))
-                  : recProv.items.isEmpty
-                  ? const Center(child: Text('No hay recomendaciones'))
-                  : ListView.separated(
+                  : ListView.builder(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 itemCount: recProv.items.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
                 itemBuilder: (_, i) {
                   final p = recProv.items[i];
-                  return SizedBox(
-                    width: 140,
+                  return Container(
+                    width: 160,
+                    margin: const EdgeInsets.only(right: 12),
                     child: Card(
+                      color: const Color(0xFF2C2C2E),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      elevation: 2,
+                          borderRadius:
+                          BorderRadius.circular(12)),
                       child: InkWell(
                         onTap: () {
-
-                          context.read<CartProvider>().addProduct(p);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Agregado: ${p.name}')),
+                          context
+                              .read<CartProvider>()
+                              .addProduct(p);
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(
+                            SnackBar(
+                                content:
+                                Text('${p.name} agregado')),
                           );
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(12),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
                             children: [
                               Expanded(
-                                child: Center(
-                                  child: Text(
-                                    p.name,
-                                    textAlign: TextAlign.center,
+                                child: Text(p.name,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                ),
+                                    style: const TextStyle(
+                                        color: Colors.white)),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 '\$${p.finalPrice.toStringAsFixed(2)}',
-                                style: const TextStyle(fontSize: 14),
+                                style: const TextStyle(
+                                    color: Colors.greenAccent,
+                                    fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
@@ -158,30 +145,29 @@ class _CartScreenState extends State<CartScreen> with WidgetsBindingObserver {
                 },
               ),
             ),
-
-            const Divider(),
-
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total: \$${cart.total.toStringAsFixed(2)}',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const CheckoutScreen()),
-                      );
-                    },
-                    child: const Text('Pagar'),
-                  ),
-                ],
-              ),
+            const Divider(color: Colors.white30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total: \$${cart.total.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.payment),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const CheckoutScreen()),
+                    );
+                  },
+                  label: const Text('Pagar'),
+                ),
+              ],
             ),
           ],
         ),
@@ -189,4 +175,3 @@ class _CartScreenState extends State<CartScreen> with WidgetsBindingObserver {
     );
   }
 }
-

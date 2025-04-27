@@ -43,15 +43,11 @@ class _VoiceCartScreenState extends State<VoiceCartScreen> {
 
   Future<void> _sendCommand() async {
     if (_text.isEmpty) return;
-
-    setState(() {
-      _processing = true;
-    });
+    setState(() => _processing = true);
 
     final provider = context.read<CartProvider>();
     try {
       await provider.processVoiceCommand(_text);
-
       if (mounted) {
         if (provider.lastAddedItems.isNotEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -76,20 +72,20 @@ class _VoiceCartScreenState extends State<VoiceCartScreen> {
         );
       }
     } finally {
-      if (mounted) {
-        setState(() {
-          _processing = false;
-        });
-      }
+      if (mounted) setState(() => _processing = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Agregar por voz')),
+      backgroundColor: const Color(0xFF1C1C1E),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2C2C2E),
+        title: const Text('Agregar por voz'),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Expanded(
@@ -98,20 +94,22 @@ class _VoiceCartScreenState extends State<VoiceCartScreen> {
                   _text.isEmpty
                       ? 'Pulsa el micrófono e indica productos'
                       : _text,
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(
+                      fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
             ElevatedButton.icon(
-              onPressed: _listening ? _stopListening : _startListening,
               icon: Icon(_listening ? Icons.mic_off : Icons.mic),
               label: Text(_listening ? 'Detener' : 'Escuchar'),
+              onPressed: _listening ? _stopListening : _startListening,
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _text.isEmpty ? null : _sendCommand,
-              child: const Text('Agregar al carrito'),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: _text.isEmpty || _processing ? null : _sendCommand,
+              label: const Text('Agregar al carrito'),
             ),
           ],
         ),

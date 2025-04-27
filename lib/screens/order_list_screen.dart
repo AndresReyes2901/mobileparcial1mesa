@@ -22,71 +22,82 @@ class _OrderListScreenState extends State<OrderListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Mis Órdenes')),
+      backgroundColor: const Color(0xFF1C1C1E),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2C2C2E),
+        title: const Text('Mis Órdenes'),
+      ),
       body: Consumer<OrderProvider>(
         builder: (context, prov, _) {
           if (prov.loading) {
             return const Center(child: CircularProgressIndicator());
           }
           if (prov.error != null) {
-            return Center(child: Text('Error: ${prov.error}'));
+            return Center(
+                child: Text('Error: ${prov.error}',
+                    style: const TextStyle(color: Colors.red)));
           }
           if (prov.orders.isEmpty) {
-            return const Center(child: Text('No hay órdenes disponibles'));
+            return const Center(
+                child: Text('No hay órdenes disponibles',
+                    style: TextStyle(color: Colors.white70)));
           }
+
           return ListView.builder(
+            padding: const EdgeInsets.all(12),
             itemCount: prov.orders.length,
             itemBuilder: (context, i) {
               final order = prov.orders[i];
               return Card(
-                margin: const EdgeInsets.all(8.0),
+                color: const Color(0xFF2C2C2E),
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Orden #${order.id}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text('Orden #${order.id}',
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                      const SizedBox(height: 6),
                       Text(
                         'Fecha: ${DateFormat('dd/MM/yyyy HH:mm').format(order.createdAt.toLocal())}',
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(color: Colors.white70),
                       ),
-                      Text(
-                        'Estado: ${order.status}',
-                        style: const TextStyle(fontSize: 14),
-                      ),
+                      Text('Estado: ${order.status}',
+                          style: const TextStyle(color: Colors.white70)),
+                      const SizedBox(height: 6),
                       Text(
                         'Total: \$${order.totalPrice.toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(
+                            color: Colors.greenAccent,
+                            fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Items:',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                      const Divider(color: Colors.white30),
+                      const Text('Items:',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
+                      ...order.items.map(
+                            (item) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(item.productName,
+                                    style: const TextStyle(color: Colors.white)),
+                              ),
+                              Text('x${item.quantity}',
+                                  style: const TextStyle(color: Colors.white60)),
+                            ],
+                          ),
                         ),
-                      ),
-                      Column(
-                        children:
-                            order.items
-                                .map(
-                                  (item) => ListTile(
-                                    title: Text(item.productName),
-                                    subtitle: Text(
-                                      'Cantidad: ${item.quantity}',
-                                    ),
-                                    trailing: Text(
-                                      'ID Producto: ${item.product}',
-                                    ),
-                                  ),
-                                )
-                                .toList(),
                       ),
                     ],
                   ),

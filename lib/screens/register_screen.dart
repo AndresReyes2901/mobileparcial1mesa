@@ -1,11 +1,10 @@
-// lib/screens/register_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
-import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -20,21 +19,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear Cuenta')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      backgroundColor: const Color(0xFF1C1C1E),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2C2C2E),
+        title: const Text('Crear Cuenta'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            TextField(controller: _nombreCtrl, decoration: const InputDecoration(labelText: 'Nombre')),
-            TextField(controller: _apellidoCtrl, decoration: const InputDecoration(labelText: 'Apellido')),
-            TextField(controller: _correoCtrl, decoration: const InputDecoration(labelText: 'Correo electrónico')),
-            TextField(controller: _passCtrl, decoration: const InputDecoration(labelText: 'Contraseña'), obscureText: true),
-            TextField(controller: _pass2Ctrl, decoration: const InputDecoration(labelText: 'Confirmar contraseña'), obscureText: true),
-            const SizedBox(height: 16),
+            _buildTextField(_nombreCtrl, 'Nombre'),
+            _buildTextField(_apellidoCtrl, 'Apellido'),
+            _buildTextField(_correoCtrl, 'Correo electrónico'),
+            _buildTextField(_passCtrl, 'Contraseña', isPassword: true),
+            _buildTextField(_pass2Ctrl, 'Confirmar contraseña', isPassword: true),
+            const SizedBox(height: 20),
             auth.loading
                 ? const CircularProgressIndicator()
-                : ElevatedButton(
+                : ElevatedButton.icon(
+              icon: const Icon(Icons.person_add),
               onPressed: () async {
                 await auth.register(
                   nombre: _nombreCtrl.text,
@@ -43,29 +48,62 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   password: _passCtrl.text,
                   passwordConfirm: _pass2Ctrl.text,
                 );
-                if (auth.error == null) {
+                if (auth.error == null && context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Registro exitoso')),
                   );
                   Navigator.pop(context);
                 }
               },
-              child: const Text('Registrarse'),
+              label: const Text('Registrarse'),
             ),
             if (auth.error != null) ...[
-              const SizedBox(height: 8),
-              Text(auth.error!, style: const TextStyle(color: Colors.red)),
+              const SizedBox(height: 12),
+              Text(auth.error!, style: const TextStyle(color: Colors.redAccent)),
             ],
+            const SizedBox(height: 12),
             TextButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, 'login');
               },
-              child: const Text('¿Ya tienes cuenta? Inicia sesión'),
+              child: const Text(
+                '¿Ya tienes cuenta? Inicia sesión',
+                style: TextStyle(color: Color(0xFF0A84FF)),
+              ),
             ),
           ],
         ),
       ),
     );
   }
-}
 
+  Widget _buildTextField(TextEditingController ctrl, String label,
+      {bool isPassword = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: TextField(
+        controller: ctrl,
+        obscureText: isPassword,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(color: Colors.white70),
+          filled: true,
+          fillColor: const Color(0xFF2C2C2E),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Color(0xFF38383A)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Color(0xFF38383A)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Color(0xFF0A84FF)),
+          ),
+        ),
+      ),
+    );
+  }
+}

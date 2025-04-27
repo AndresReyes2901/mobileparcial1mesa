@@ -18,83 +18,104 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Iniciar sesión')),
+      backgroundColor: const Color(0xFF1C1C1E),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2C2C2E),
+        title: const Text('Iniciar sesión'),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            TextField(
-              controller: _userCtrl,
-              decoration: const InputDecoration(labelText: 'Correo'),
-            ),
+            _buildTextField(_userCtrl, 'Correo electrónico'),
             const SizedBox(height: 16),
-            TextField(
-              controller: _passCtrl,
-              decoration: const InputDecoration(labelText: 'Contraseña'),
-              obscureText: true,
-            ),
+            _buildTextField(_passCtrl, 'Contraseña', isPassword: true),
             if (_error != null) ...[
               const SizedBox(height: 12),
-              Text(_error!, style: const TextStyle(color: Colors.red)),
+              Text(_error!, style: const TextStyle(color: Colors.redAccent)),
             ],
             const SizedBox(height: 24),
             _loading
                 ? const CircularProgressIndicator()
-                : ElevatedButton(
-              onPressed: () async {
-                setState(() {
-                  _loading = true;
-                  _error = null;
-                });
-                try {
-                  final success = await context.read<AuthProvider>().login(
-                    _userCtrl.text.trim(),
-                    _passCtrl.text.trim(),
-                  );
-                  if (success && context.mounted) {
-
-                    Navigator.pushReplacementNamed(context, 'main');
-                  } else if (context.mounted) {
-                    setState(() {
-                      _error = 'Error al iniciar sesión';
-                      _loading = false;
-                    });
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    setState(() {
-                      _error = e.toString();
-                      _loading = false;
-                    });
-                  }
-                }
-              },
-              child: const Text('Iniciar sesión'),
+                : ElevatedButton.icon(
+              icon: const Icon(Icons.login),
+              onPressed: _handleLogin,
+              label: const Text('Iniciar sesión'),
             ),
           ],
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextButton(
-              child: const Text('¿Olvidaste tu contraseña?'),
-              onPressed: () {
-
-                Navigator.pushNamed(context, 'password-reset');
-              },
+              onPressed: () => Navigator.pushNamed(context, 'password-reset'),
+              child: const Text('¿Olvidaste tu contraseña?',
+                  style: TextStyle(color: Color(0xFF0A84FF))),
             ),
             TextButton(
-              child: const Text('¿No tienes cuenta? Regístrate'),
-              onPressed: () {
-                Navigator.pushNamed(context, 'register');
-              },
+              onPressed: () => Navigator.pushNamed(context, 'register'),
+              child: const Text('¿No tienes cuenta? Regístrate',
+                  style: TextStyle(color: Color(0xFF0A84FF))),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildTextField(TextEditingController ctrl, String label,
+      {bool isPassword = false}) {
+    return TextField(
+      controller: ctrl,
+      obscureText: isPassword,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.white70),
+        filled: true,
+        fillColor: const Color(0xFF2C2C2E),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF38383A)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF38383A)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF0A84FF)),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleLogin() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final success = await context.read<AuthProvider>().login(
+        _userCtrl.text.trim(),
+        _passCtrl.text.trim(),
+      );
+      if (success && mounted) {
+        Navigator.pushReplacementNamed(context, 'main');
+      } else {
+        setState(() {
+          _error = 'Error al iniciar sesión';
+          _loading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
+    }
   }
 }

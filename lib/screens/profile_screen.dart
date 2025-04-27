@@ -14,44 +14,58 @@ class ProfileScreen extends StatelessWidget {
     final correo = user?['correo'] ?? '';
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mi Perfil')),
+      backgroundColor: const Color(0xFF1C1C1E),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF2C2C2E),
+        title: const Text('Mi Perfil'),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(radius: 40, child: Icon(Icons.person, size: 40)),
-            const SizedBox(height: 16),
+            const CircleAvatar(
+              radius: 50,
+              backgroundColor: Color(0xFF0A84FF),
+              child: Icon(Icons.person, size: 50, color: Colors.white),
+            ),
+            const SizedBox(height: 20),
             Text(
-              'Nombre: $nombre',
-              style: Theme.of(context).textTheme.titleMedium,
+              '$nombre $apellido',
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             Text(
-              'Apellido: $apellido',
-              style: Theme.of(context).textTheme.titleMedium,
+              correo,
+              style: const TextStyle(color: Colors.white70),
             ),
-            Text(
-              'Correo: $correo',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const Divider(height: 32),
+            const Divider(height: 40, color: Colors.white30),
             ListTile(
-              leading: const Icon(Icons.history),
-              title: const Text('Mis Órdenes'),
-              onTap: () {
-                Navigator.pushNamed(context, 'orders');
-              },
+              leading: const Icon(Icons.history, color: Colors.white),
+              title: const Text('Mis Órdenes', style: TextStyle(color: Colors.white)),
+              trailing: const Icon(Icons.chevron_right, color: Colors.white54),
+              onTap: () => Navigator.pushNamed(context, 'orders'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              tileColor: const Color(0xFF2C2C2E),
             ),
+            const SizedBox(height: 30),
             ElevatedButton.icon(
               icon: const Icon(Icons.logout),
               label: const Text('Cerrar sesión'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              ),
               onPressed: () async {
                 await context.read<AuthProvider>().logout();
                 if (context.mounted) {
                   Navigator.of(context).pushReplacementNamed('login');
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             ),
           ],
         ),
