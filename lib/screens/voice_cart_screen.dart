@@ -79,10 +79,16 @@ class _VoiceCartScreenState extends State<VoiceCartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: const Color(0xFF7209B7),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2C2C2E),
-        title: const Text('Agregar por voz'),
+        backgroundColor: const Color(0xFF1E1E2F),
+        title: const Text(
+          'Agregar por voz',
+          style: TextStyle(
+            color: Color(0xFFF72585),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

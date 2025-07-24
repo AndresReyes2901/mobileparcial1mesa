@@ -28,9 +28,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: const Color(0xFFF8F8F8), // fondo claro base
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2C2C2E),
+        toolbarHeight: 70, // Por defecto son 56.0
+        backgroundColor:const Color(0xFF1E1E2F), // fondo oscuro
+        titleTextStyle: const TextStyle(
+          color: Color(0xFFF72585),
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
         title: _isSearchVisible ? _buildSearchField() : const Text('Productos'),
         actions: [
           IconButton(

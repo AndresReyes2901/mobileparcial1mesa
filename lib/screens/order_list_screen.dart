@@ -22,10 +22,17 @@ class _OrderListScreenState extends State<OrderListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: const Color(0xFFF8F8F8),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2C2C2E),
-        title: const Text('Mis Órdenes'),
+        toolbarHeight: 70, // Por defecto son 56.0
+        backgroundColor: const Color(0xFF1E1E2F),
+        title: const Text(
+          'Mis Órdenes',
+          style: TextStyle(
+            color: Color(0xFFF72585),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Consumer<OrderProvider>(
         builder: (context, prov, _) {

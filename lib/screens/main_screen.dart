@@ -25,9 +25,9 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: const Color(0xFF1C1C1E),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF2C2C2E),
-        selectedItemColor: const Color(0xFF0A84FF),
-        unselectedItemColor: Colors.white54,
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color(0xFFF72585),
+        unselectedItemColor: const Color(0xFF1E1E2F),
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         onTap: (idx) => setState(() => _currentIndex = idx),

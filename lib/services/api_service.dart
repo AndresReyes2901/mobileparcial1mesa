@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiService {
-  static const _baseUrl = 'https://backenddjango-production-c48c.up.railway.app';
+  static const _baseUrl = 'https://web-production-0328.up.railway.app';
   final _storage = const FlutterSecureStorage();
 
   Future<Map<String, String>> _headers() async {

@@ -14,10 +14,17 @@ class ProfileScreen extends StatelessWidget {
     final correo = user?['correo'] ?? '';
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: const Color(0xFFF8F8F8),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2C2C2E),
-        title: const Text('Mi Perfil'),
+        toolbarHeight: 70, // Por defecto son 56.0
+        backgroundColor: const Color(0xFF1E1E2F),
+        title: const Text(
+          'Mi Perfil',
+          style: TextStyle(
+            color: Color(0xFFF72585),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -34,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Color(0xFFF72585),
               ),
             ),
             Text(
@@ -50,14 +57,14 @@ class ProfileScreen extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              tileColor: const Color(0xFF2C2C2E),
+              tileColor: const Color(0xFF2C2C2E).withOpacity(0.3),
             ),
             const SizedBox(height: 30),
             ElevatedButton.icon(
               icon: const Icon(Icons.logout),
               label: const Text('Cerrar sesión'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: Color(0xFFF72585),
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
               onPressed: () async {

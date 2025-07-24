@@ -5,7 +5,7 @@ import 'package:appparcial/services/api_service.dart';
 
 class AuthService {
   static const _baseUrl =
-      'https://backenddjango-production-c48c.up.railway.app';
+      'https://web-production-0328.up.railway.app';
   final _storage = const FlutterSecureStorage();
   final _api = ApiService();
 

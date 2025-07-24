@@ -25,10 +25,17 @@ class _CartScreenState extends State<CartScreen> {
     final recProv = context.watch<RecommendationProvider>();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: const Color(0xFFF8F8F8),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2C2C2E),
-        title: const Text('Mi Carrito'),
+        toolbarHeight: 70, // Por defecto son 56.0
+        backgroundColor: const Color(0xFF1E1E2F),
+        title: const Text(
+          'Mi Carrito',
+          style: TextStyle(
+            color: Color(0xFFF72585),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: cart.loading
           ? const Center(child: CircularProgressIndicator())
