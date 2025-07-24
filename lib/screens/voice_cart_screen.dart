@@ -79,7 +79,7 @@ class _VoiceCartScreenState extends State<VoiceCartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF7209B7),
+      backgroundColor: const Color(0xFFF72585),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1E1E2F),
         title: const Text(

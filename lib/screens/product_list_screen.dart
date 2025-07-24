@@ -28,7 +28,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8), // fondo claro base
+      backgroundColor: const Color(0xFFF72585), // fondo claro base
       appBar: AppBar(
         toolbarHeight: 70, // Por defecto son 56.0
         backgroundColor:const Color(0xFF1E1E2F), // fondo oscuro
